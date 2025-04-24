@@ -1,11 +1,13 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tinkerly/models/usermodel.dart';
 import 'package:tinkerly/providers/userprovider.dart';
+import 'package:tinkerly/screens/Authentication/mainSignup.dart';
 import 'dart:convert';
 
 import 'package:tinkerly/screens/Authentication/signup.dart';
@@ -24,6 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isPasswordVisible = false;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final DatabaseReference _dbRef = FirebaseDatabase.instance.ref().child("users");
 
   Future<void> _login(
       BuildContext context, String email, String password) async {
@@ -44,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
         final Map<String, dynamic> loginData = jsonDecode(response.body);
 
         if (loginData['errored'] == false) {
-          final token = loginData['data']['token'];
+          var token = loginData['data']['token'];
           print('New Token: $token');
 
           // Store token
@@ -110,6 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
         final userDetails = profile['userDetails'];
 
         final userModel = UserModel(
+          avatarId: profile['avatarId'],
           userId: userDetails['userId'],
           name: userDetails['name'],
           email: userDetails['email'],
@@ -124,6 +128,22 @@ class _LoginScreenState extends State<LoginScreen> {
 
         Provider.of<UserProvider>(context, listen: false).setUser(userModel);
         print("User stored in provider successfully ✅");
+
+            DatabaseEvent event = await _dbRef.child(userDetails['phone']).once();
+    DataSnapshot snapshot = event.snapshot;
+
+    if (!snapshot.exists) {
+      // If user does not exist, create a new one
+      await _dbRef.child(userDetails['phone']).set({
+        "name": userDetails['name'],
+        "phone": userDetails['phone'],
+      });
+    }
+
+    // Save login state using SharedPreferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString("phone", userDetails['phone']);
+    await prefs.setString("name",  userDetails['name']);
       } else {
         print('Token check failed with status code: ${response.statusCode}');
       }
@@ -185,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => SignupPage()),
+                  MaterialPageRoute(builder: (context) => SignupSelectionPage()),
                 );
               },
               child: Text('Signup'),

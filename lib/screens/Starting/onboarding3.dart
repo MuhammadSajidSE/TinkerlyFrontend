@@ -26,7 +26,7 @@ class Onboarding3Screen extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
-            String? token = prefs.getString('UserToken');
+            var token = prefs.getString('UserToken');
 
             if (token == null) {
               Navigator.pushReplacement(
@@ -56,14 +56,15 @@ class Onboarding3Screen extends StatelessWidget {
                     final workerProfile = profile['workerProfile'];
 
                     final userModel = UserModel(
-                      userId: userDetails['userId'],
-                      name: userDetails['name'],
-                      email: userDetails['email'],
-                      phone: userDetails['phone'],
-                      age: userDetails['age'],
-                      address: userDetails['address'],
-                      nic: userDetails['nic'],
-                      token: tokenData['data']['token'],
+                      avatarId: profile['avatarId'] ?? '',
+                      userId: userDetails['userId'] ?? '',
+                      name: userDetails['name'] ?? '',
+                      email: userDetails['email'] ?? '',
+                      phone: userDetails['phone'] ?? '',
+                      age: userDetails['age'] ?? 0,
+                      address: userDetails['address'] ?? '',
+                      nic: userDetails['nic'] ?? 0,
+                      token: tokenData['data']['token'] ?? '',
                       isCustomer: workerProfile == null,
                       isWorker: customerProfile == null,
                     );
@@ -91,7 +92,6 @@ class Onboarding3Screen extends StatelessWidget {
                     print('Token Check Error: ${tokenData['errorMessage']}');
                   }
                 } else {
-                  
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => LoginScreen()),

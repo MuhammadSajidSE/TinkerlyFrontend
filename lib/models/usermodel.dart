@@ -9,6 +9,7 @@ class UserModel {
   final String token;
   final bool isCustomer;
   final bool isWorker;
+  final String avatarId; 
 
   UserModel({
     required this.userId,
@@ -21,5 +22,6 @@ class UserModel {
     required this.token,
     required this.isCustomer,
     required this.isWorker,
+    required this.avatarId,
   });
 }

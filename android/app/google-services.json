@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "169933067161",
+    "project_id": "tinkerlychatapp",
+    "storage_bucket": "tinkerlychatapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169933067161:android:6cbd11ec0a131554c27908",
+        "android_client_info": {
+          "package_name": "com.example.tinkerly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_1vWbP0CafLuMeUG_4R035KAKWZfig8Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

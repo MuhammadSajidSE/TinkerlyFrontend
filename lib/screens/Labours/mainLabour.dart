@@ -13,7 +13,7 @@ class Mainlabour extends StatefulWidget {
 }
 
 class _MainlabourState extends State<Mainlabour> {
- int _selectedIndex = 0;
+  int _selectedIndex = 0;
 
   final List<Widget> _pages = [
     Worktask(),
@@ -52,6 +52,17 @@ class _MainlabourState extends State<Mainlabour> {
               // Handle navigation
             },
           ),
+    //       ListTile(
+    //         leading: Icon(Icons.info),
+    //         title: Text('Chatting'),
+    //         onTap: () {
+    //           Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => ContactsScreen(phone: phone)),
+    // );
+    //           // Handle navigation
+    //         },
+    //       ),
           ListTile(
             leading: Icon(Icons.info),
             title: Text('LogOut'),
