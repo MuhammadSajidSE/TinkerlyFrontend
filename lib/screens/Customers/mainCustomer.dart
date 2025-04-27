@@ -8,14 +8,15 @@ import 'package:tinkerly/providers/userprovider.dart';
 import 'package:tinkerly/screens/Authentication/login.dart';
 import 'package:tinkerly/screens/Chatting/contact.dart';
 import 'package:tinkerly/screens/Chatting/login.dart';
-import 'package:tinkerly/screens/Customers/Addwork.dart';
+import 'package:tinkerly/screens/Customers/Requestwork.dart';
+import 'package:tinkerly/screens/Customers/ResponseWork.dart';
 import 'package:tinkerly/screens/Customers/customerProfile.dart';
 import 'package:tinkerly/screens/Customers/skill_detail.dart';
 
 class MainCustomer extends StatefulWidget {
   const MainCustomer({super.key});
 
-  @override 
+  @override
   _MainCustomerState createState() => _MainCustomerState();
 }
 
@@ -101,7 +102,8 @@ class _MainCustomerState extends State<MainCustomer> {
     final user = Provider.of<UserProvider>(context).user;
     _pages = [
       _homeScreen(user),
-      const Addwork(),
+      const CustomerRequestWork(),
+      const CustomerResponsework(),
       const Customerprofile(),
     ];
   }
@@ -198,10 +200,6 @@ class _MainCustomerState extends State<MainCustomer> {
                           Text(item['type'],
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold)),
-                          const SizedBox(height: 4),
-                          SingleChildScrollView(
-                            child: Text("Rs. ${item['recommendedPrice']}"),
-                          ),
                         ],
                       ),
                     ),
@@ -257,7 +255,7 @@ class _MainCustomerState extends State<MainCustomer> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        ContactsScreen(phone:user?.phone ?? "N/A")),
+                        ContactsScreen(phone: user?.phone ?? "N/A")),
               );
               // Handle navigation
             },
@@ -314,9 +312,10 @@ class _MainCustomerState extends State<MainCustomer> {
         onTap: _onItemTapped,
         selectedItemColor: Colors.blue,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.work), label: 'Working'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.home,color: Colors.black,), label: 'Home',),
+          BottomNavigationBarItem(icon: Icon(Icons.work,color: Colors.black,), label: 'Request'),
+          BottomNavigationBarItem(icon: Icon(Icons.call,color: Colors.black,), label: 'Response'),
+          BottomNavigationBarItem(icon: Icon(Icons.person,color: Colors.black,), label: 'Profile'),
         ],
       ),
     );

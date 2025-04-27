@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tinkerly/providers/userprovider.dart';
 import 'package:tinkerly/screens/Authentication/login.dart';
 import 'package:tinkerly/screens/Labours/HistoryWork.dart';
 import 'package:tinkerly/screens/Labours/LabourProfile.dart';
 import 'package:tinkerly/screens/Labours/WorkTask.dart';
+import 'package:tinkerly/screens/Labours/requestBooking.dart';
 
 class Mainlabour extends StatefulWidget {
   const Mainlabour({super.key});
@@ -18,6 +21,7 @@ class _MainlabourState extends State<Mainlabour> {
   final List<Widget> _pages = [
     Worktask(),
     Historywork(),
+    WorkerRequestsPage(),
     Labourprofile(),
   ];
 
@@ -28,44 +32,49 @@ class _MainlabourState extends State<Mainlabour> {
   }
 
   Widget buildDrawer() {
+    final user = Provider.of<UserProvider>(context).user;
+
     return Drawer(
       child: ListView(
         children: [
-          DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blue),
-            child: Text("Labour",
-                style: TextStyle(color: Colors.white, fontSize: 24)),
+          UserAccountsDrawerHeader(
+            accountName: Text(user?.name ?? "Customer"),
+            accountEmail: Text("Avatar ID: ${user?.avatarId ?? "N/A"}"),
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: user != null
+                  ? NetworkImage(
+                      "http://150.136.5.153:2280/cdn/${user.avatarId}.png")
+                  : null,
+              child: user == null ? const Icon(Icons.person) : null,
+            ),
+            decoration: const BoxDecoration(color: Colors.blue),
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () => Navigator.pop(context),
+          ),
+          ListTile(
+            leading: const Icon(Icons.info),
+            title: const Text('About'),
+            onTap: () => Navigator.pop(context),
+          ),
+          ListTile(
+            leading: Icon(Icons.info),
+            title: Text('Chatting'),
             onTap: () {
-              Navigator.pop(context);
+              // Navigator.pushReplacement(
+              //   context,
+              //   MaterialPageRoute(
+              //       builder: (context) =>
+              //           ContactsScreen(phone:user?.phone ?? "N/A")),
+              // );
               // Handle navigation
             },
           ),
           ListTile(
-            leading: Icon(Icons.info),
-            title: Text('About'),
-            onTap: () {
-              Navigator.pop(context);
-              // Handle navigation
-            },
-          ),
-    //       ListTile(
-    //         leading: Icon(Icons.info),
-    //         title: Text('Chatting'),
-    //         onTap: () {
-    //           Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => ContactsScreen(phone: phone)),
-    // );
-    //           // Handle navigation
-    //         },
-    //       ),
-          ListTile(
-            leading: Icon(Icons.info),
-            title: Text('LogOut'),
+            leading: const Icon(Icons.logout),
+            title: const Text('LogOut'),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.remove('UserToken');
@@ -73,7 +82,6 @@ class _MainlabourState extends State<Mainlabour> {
                 context,
                 MaterialPageRoute(builder: (context) => LoginScreen()),
               );
-              // Handle navigation
             },
           ),
         ],
@@ -95,15 +103,31 @@ class _MainlabourState extends State<Mainlabour> {
         selectedItemColor: Colors.blue,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(
+              Icons.home,
+              color: Colors.black,
+            ),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.work),
+            icon: Icon(
+              Icons.work,
+              color: Colors.black,
+            ),
             label: 'Working',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(
+              Icons.call,
+              color: Colors.black,
+            ),
+            label: 'Request',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person,
+              color: Colors.black,
+            ),
             label: 'Profile',
           ),
         ],

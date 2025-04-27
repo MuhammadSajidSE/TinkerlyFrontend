@@ -122,46 +122,56 @@ class _SkillDetailScreenState extends State<SkillDetailScreen> {
     fetchWorkers();
   }
 
-  Future<void> fetchWorkers() async {
-    final user = Provider.of<UserProvider>(context, listen: false).user;
-    final token = user?.token;
+Future<void> fetchWorkers() async {
+  final user = Provider.of<UserProvider>(context, listen: false).user;
+  final token = user?.token;
 
-    final url = Uri.parse('http://150.136.5.153:2279/workers');
+  final url = Uri.parse('http://150.136.5.153:2279/workers');
 
-    try {
-      final response = await http.get(
-        url,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-      );
+  try {
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
 
-      if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      final data = jsonResponse['data'] as List;
 
-        final data = jsonResponse['data'] as List;
-        final allWorkers = data.expand((group) => group).toList();
+      // Flatten the nested list
+      final allWorkers = data.expand((group) => group).toList();
 
-        final filtered = allWorkers.where((worker) {
-          final skills = List<String>.from(worker['workerProfile']['workerSkills']);
-          return skills.contains(widget.skillId);
-        }).map((e) => Map<String, dynamic>.from(e)).toList();
-
-        setState(() {
-          matchedWorkers = filtered;
-          isLoading = false;
-        });
-      } else {
-        throw Exception('Failed to load workers');
+      // Remove duplicates by userId
+      final uniqueWorkers = <String, Map<String, dynamic>>{};
+      for (final worker in allWorkers) {
+        final userId = worker['userId'];
+        uniqueWorkers[userId] = Map<String, dynamic>.from(worker);
       }
-    } catch (e) {
-      print('Error: $e');
+
+      // Filter based on skillId
+      final filtered = uniqueWorkers.values.where((worker) {
+        final skills = List<String>.from(worker['workerProfile']['workerSkills']);
+        return skills.contains(widget.skillId);
+      }).toList();
+
       setState(() {
+        matchedWorkers = filtered;
         isLoading = false;
       });
+    } else {
+      throw Exception('Failed to load workers');
     }
+  } catch (e) {
+    print('Error: $e');
+    setState(() {
+      isLoading = false;
+    });
   }
+}
+
 
   void navigateToBookingScreen(String userId) {
     Navigator.push(
