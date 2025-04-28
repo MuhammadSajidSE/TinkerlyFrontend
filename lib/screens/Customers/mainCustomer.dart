@@ -8,6 +8,8 @@ import 'package:tinkerly/providers/userprovider.dart';
 import 'package:tinkerly/screens/Authentication/login.dart';
 import 'package:tinkerly/screens/Chatting/contact.dart';
 import 'package:tinkerly/screens/Chatting/login.dart';
+import 'package:tinkerly/screens/Customers/HistoryBooked.dart';
+import 'package:tinkerly/screens/Customers/ListOfBookedWork.dart';
 import 'package:tinkerly/screens/Customers/Requestwork.dart';
 import 'package:tinkerly/screens/Customers/ResponseWork.dart';
 import 'package:tinkerly/screens/Customers/customerProfile.dart';
@@ -103,6 +105,7 @@ class _MainCustomerState extends State<MainCustomer> {
     _pages = [
       _homeScreen(user),
       const CustomerRequestWork(),
+      const BookingListWidget(),
       const CustomerResponsework(),
       const Customerprofile(),
     ];
@@ -260,6 +263,19 @@ class _MainCustomerState extends State<MainCustomer> {
               // Handle navigation
             },
           ),
+           ListTile(
+            leading: Icon(Icons.info),
+            title: Text('History'),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        WorkerHistoryScreen()),
+              );
+              // Handle navigation
+            },
+          ),
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('LogOut'),
@@ -314,6 +330,7 @@ class _MainCustomerState extends State<MainCustomer> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home,color: Colors.black,), label: 'Home',),
           BottomNavigationBarItem(icon: Icon(Icons.work,color: Colors.black,), label: 'Request'),
+          BottomNavigationBarItem(icon: Icon(Icons.book,color: Colors.black,), label: 'Booked'),
           BottomNavigationBarItem(icon: Icon(Icons.call,color: Colors.black,), label: 'Response'),
           BottomNavigationBarItem(icon: Icon(Icons.person,color: Colors.black,), label: 'Profile'),
         ],
