@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color primaryColor = Color(
-    0xFF1E3A8A,
+    0xFF2b557d,
   ); // Blue shade from the 'Jôbizz' text
   static const Color secondaryColor = Color(
-    0xFF616161,
+    0xFFced5df,
   ); // Grey color from Text widget
   static const Color backgroundColor = Color(
     0xFFF5F5F5,

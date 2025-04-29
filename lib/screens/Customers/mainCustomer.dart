@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:tinkerly/providers/userprovider.dart';
+import 'package:tinkerly/reusable_components/constants.dart';
 import 'package:tinkerly/screens/Authentication/login.dart';
 import 'package:tinkerly/screens/Chatting/contact.dart';
 import 'package:tinkerly/screens/Chatting/login.dart';
@@ -30,8 +31,17 @@ class _MainCustomerState extends State<MainCustomer> {
   String? phone;
 
   final List<Map<String, dynamic>> _domains = [
-    {'icon': Icons.carpenter, 'label': 'Carpentry', 'domain': 0},
-    {'icon': Icons.lightbulb, 'label': 'Electrical', 'domain': 1},
+    {
+      'icon': Icons.carpenter,
+      'label': 'Carpentry',
+      'domain': 0,
+    },
+    {
+      'icon': Icons.lightbulb,
+      'label': 'Electrical',
+      'domain': 1,
+      'image': 'assets/images/bulb.jpg'
+    },
     {'icon': Icons.plumbing, 'label': 'Plumbing', 'domain': 2},
     {'icon': Icons.foundation, 'label': 'Masonry', 'domain': 3},
     {'icon': Icons.construction, 'label': 'Welding', 'domain': 4},
@@ -114,7 +124,7 @@ class _MainCustomerState extends State<MainCustomer> {
     }
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -122,40 +132,69 @@ class _MainCustomerState extends State<MainCustomer> {
             "Work Domains",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 0),
           SizedBox(
-            height: 180,
-            child: GridView.count(
-              crossAxisCount: 3,
-              childAspectRatio: 1.3,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              physics: const NeverScrollableScrollPhysics(),
-              children: _domains.map((domain) {
-                final isSelected = _selectedDomain == domain['domain'];
-                return GestureDetector(
-                  onTap: () => filterWorkByDomain(domain['domain']),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? Colors.blue.shade300
-                          : Colors.blue.shade100,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(domain['icon'], size: 30, color: Colors.blue),
-                        const SizedBox(height: 5),
-                        Text(
-                          domain['label'],
-                          style: const TextStyle(fontWeight: FontWeight.w600),
+            height: 150,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: _domains.map((domain) {
+                  final isSelected = _selectedDomain == domain['domain'];
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedDomain =
+                            domain['domain']; // Update selected domain
+                        filterWorkByDomain(domain['domain']);
+                      });
+                    },
+                    child: Container(
+                      width: 240,
+                      height: 130,
+                      margin: const EdgeInsets.only(right: 12, left: 9),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/bulb.jpg'),
+                          opacity: 0.3,
+                          fit: BoxFit.cover,
                         ),
-                      ],
+                        color:
+                            isSelected ? Color(0xFF2B557D) : Color(0xFFced5df),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0xFF2B557D).withOpacity(0.4),
+                            spreadRadius: 3,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                        border: Border.all(color: Color(0xFFced5df), width: 1),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(domain['icon'],
+                              size: 40,
+                              color: isSelected ? Colors.white : Colors.black),
+                          const SizedBox(height: 10),
+                          Text(
+                            domain['label'],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: isSelected ? Colors.white : Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }).toList(),
+                  );
+                }).toList(),
+              ),
             ),
           ),
           const SizedBox(height: 20),
@@ -207,7 +246,7 @@ class _MainCustomerState extends State<MainCustomer> {
                 );
               },
             ),
-          ),
+          )
         ],
       ),
     );
@@ -281,41 +320,80 @@ class _MainCustomerState extends State<MainCustomer> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
     _pages[0] = _homeScreen(user);
+    const images = [AssetImage("assets/images/design.png")];
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(70),
         child: AppBar(
-          title: Row(
-            children: [
-              if (user != null)
-                CircleAvatar(
-                  radius: 18,
-                  backgroundImage: NetworkImage(
-                      "http://150.136.5.153:2280/cdn/${user.avatarId}.png"),
-                )
-              else
-                const CircleAvatar(
-                  radius: 18,
-                  child: Icon(Icons.person),
-                ),
-              const SizedBox(width: 10),
-              const Text("Main Customer"),
-            ],
+          // leading: Image(image: images[0]),
+          title: const Text(
+            'Tinkerly',
+            style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryColor),
           ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
       ),
       drawer: buildDrawer(),
-      body: _pages[_selectedIndex],
+      // body: _pages[_selectedIndex],
+      body: Stack(
+        children: [
+          // Your top-right big image
+          Positioned(
+            top: 0,
+            right: 0,
+            child: Image.asset(
+              'assets/images/design.png',
+              // height: 250, // make it big
+              width: 136, // control width
+              fit: BoxFit.contain,
+            ),
+          ),
+
+          // Your main page content
+          Container(
+            padding:
+                const EdgeInsets.only(top: 100), // Push down to avoid overlap
+            child: _pages[_selectedIndex],
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedItemColor: Colors.blue,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home,color: Colors.black,), label: 'Home',),
-          BottomNavigationBarItem(icon: Icon(Icons.work,color: Colors.black,), label: 'Request'),
-          BottomNavigationBarItem(icon: Icon(Icons.call,color: Colors.black,), label: 'Response'),
-          BottomNavigationBarItem(icon: Icon(Icons.person,color: Colors.black,), label: 'Profile'),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+              color: Colors.black,
+            ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.work,
+                color: Colors.black,
+              ),
+              label: 'Request'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.call,
+                color: Colors.black,
+              ),
+              label: 'Response'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person,
+                color: Colors.black,
+              ),
+              label: 'Profile'),
         ],
       ),
     );

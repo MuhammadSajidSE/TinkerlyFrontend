@@ -1,0 +1,2 @@
+D:/University/MAD/TinkerlyFrontend/android/app/.cxx/Debug/3dl3qq1l/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/University/MAD/TinkerlyFrontend/android/app/.cxx/Debug/3dl3qq1l/armeabi-v7a/CMakeFiles/rebuild_cache.dir
