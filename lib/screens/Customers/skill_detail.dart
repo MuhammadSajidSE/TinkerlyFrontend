@@ -101,6 +101,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:tinkerly/providers/userprovider.dart';
+import 'package:tinkerly/reusable_components/constants.dart';
 import 'package:tinkerly/screens/Customers/BookingScreen.dart';
 
 class SkillDetailScreen extends StatefulWidget {
@@ -185,8 +186,30 @@ Future<void> fetchWorkers() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Skill Detail')),
-      body: isLoading
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(title: const Text('Skill Detail',style: TextStyle(color: AppColors.primaryColor,fontWeight: FontWeight.bold),),backgroundColor: Colors.transparent,),
+      body: 
+       Stack(
+        children: [
+          // Your top-right big image
+          Positioned(
+            top: 0,
+            right: 0,
+            child: Image.asset(
+              'assets/images/design.png',
+              // height: 250, // make it big
+              width: 136, // control width
+              fit: BoxFit.contain,
+            ),
+          ),
+
+          // Your main page content
+          Container(
+            padding:
+                const EdgeInsets.only(top: 10), // Push down to avoid overlap
+            child: 
+         
+      isLoading
           ? const Center(child: CircularProgressIndicator())
           : matchedWorkers.isEmpty
               ? const Center(child: Text('No workers found with this skill.'))
@@ -208,34 +231,41 @@ Future<void> fetchWorkers() async {
                       return GestureDetector(
                         onTap: () => navigateToBookingScreen(worker['userId']),
                         child: Card(
-                          elevation: 4,
+                          shadowColor: AppColors.primaryColor,
+                          elevation: 7,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
+                            side: const BorderSide(
+                              color: AppColors.primaryColor,
+                              strokeAlign: BorderSide.strokeAlignOutside,
+                              style: BorderStyle.solid,
+                              width: .5,
+                            ),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(10),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.person, size: 60, color: Colors.blueGrey),
+                                const Icon(Icons.person, size: 60, color: AppColors.primaryColor),
                                 const SizedBox(height: 10),
                                 Text(
                                   userDetails['name'] ?? 'No Name',
                                   textAlign: TextAlign.center,
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16,color: AppColors.primaryColor),
                                 ),
                                 const SizedBox(height: 5),
-                                Text('⭐ ${worker['averageRating']}', style: const TextStyle(fontSize: 14)),
+                                Text('⭐ ${worker['averageRating']}', style: const TextStyle(fontSize: 14,color: AppColors.primaryColor)),
                                 const SizedBox(height: 5),
                                 Text(
                                   userDetails['address'] ?? '',
                                   textAlign: TextAlign.center,
-                                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                                  style: const TextStyle(fontSize: 12, color: AppColors.dividerColor),
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
                                   'Exp: ${profile['yearsOfExperience']} yrs',
-                                  style: const TextStyle(fontSize: 13),
+                                  style: const TextStyle(fontSize: 13, color: AppColors.primaryColor),
                                 ),
                               ],
                             ),
@@ -245,6 +275,9 @@ Future<void> fetchWorkers() async {
                     },
                   ),
                 ),
+          )
+        ],
+      ),
     );
-  }
+  } 
 }

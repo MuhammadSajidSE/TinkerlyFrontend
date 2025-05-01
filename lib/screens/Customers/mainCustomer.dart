@@ -9,6 +9,8 @@ import 'package:tinkerly/reusable_components/constants.dart';
 import 'package:tinkerly/screens/Authentication/login.dart';
 import 'package:tinkerly/screens/Chatting/contact.dart';
 import 'package:tinkerly/screens/Chatting/login.dart';
+import 'package:tinkerly/screens/Customers/HistoryBooked.dart';
+import 'package:tinkerly/screens/Customers/ListOfBookedWork.dart';
 import 'package:tinkerly/screens/Customers/Requestwork.dart';
 import 'package:tinkerly/screens/Customers/ResponseWork.dart';
 import 'package:tinkerly/screens/Customers/customerProfile.dart';
@@ -35,17 +37,38 @@ class _MainCustomerState extends State<MainCustomer> {
       'icon': Icons.carpenter,
       'label': 'Carpentry',
       'domain': 0,
+      "image": "assets/images/carpentry-min.jpg"
     },
     {
       'icon': Icons.lightbulb,
       'label': 'Electrical',
       'domain': 1,
-      'image': 'assets/images/bulb.jpg'
+      "image": "assets/images/electrical-min.jpg"
     },
-    {'icon': Icons.plumbing, 'label': 'Plumbing', 'domain': 2},
-    {'icon': Icons.foundation, 'label': 'Masonry', 'domain': 3},
-    {'icon': Icons.construction, 'label': 'Welding', 'domain': 4},
-    {'icon': Icons.miscellaneous_services, 'label': 'Other', 'domain': 5},
+    {
+      'icon': Icons.plumbing,
+      'label': 'Plumbing',
+      'domain': 2,
+      "image": "assets/images/plumber-min.jpg"
+    },
+    {
+      'icon': Icons.foundation,
+      'label': 'Masonry',
+      'domain': 3,
+      "image": "assets/images/masonry-min.jpg"
+    },
+    {
+      'icon': Icons.construction,
+      'label': 'Welding',
+      'domain': 4,
+      "image": "assets/images/welding-min.jpg"
+    },
+    {
+      'icon': Icons.miscellaneous_services,
+      'label': 'Other',
+      'domain': 5,
+      "image": "assets/images/other-min.jpg"
+    }
   ];
 
   @override
@@ -113,6 +136,7 @@ class _MainCustomerState extends State<MainCustomer> {
     _pages = [
       _homeScreen(user),
       const CustomerRequestWork(),
+      const BookingListWidget(),
       const CustomerResponsework(),
       const Customerprofile(),
     ];
@@ -130,7 +154,10 @@ class _MainCustomerState extends State<MainCustomer> {
         children: [
           const Text(
             "Work Domains",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 22,
+                color: AppColors.primaryColor,
+                fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 0),
           SizedBox(
@@ -155,8 +182,8 @@ class _MainCustomerState extends State<MainCustomer> {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage('assets/images/bulb.jpg'),
-                          opacity: 0.3,
+                          image: AssetImage(domain['image']),
+                          opacity: 0.5,
                           fit: BoxFit.cover,
                         ),
                         color:
@@ -200,9 +227,11 @@ class _MainCustomerState extends State<MainCustomer> {
           const SizedBox(height: 20),
           const Text(
             "Skills",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 20,
+                color: AppColors.primaryColor,
+                fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 10),
           Expanded(
             child: GridView.builder(
               itemCount: _filteredWork.length,
@@ -224,21 +253,28 @@ class _MainCustomerState extends State<MainCustomer> {
                     );
                   },
                   child: Card(
-                    color: Colors.blue.shade50,
+                    color: AppColors.secondaryColor,
+                    borderOnForeground: true,
+                    shadowColor: AppColors.primaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
+                      side: const BorderSide(
+                        color: AppColors.primaryColor,
+                        width: .5,
+                      ),
                     ),
-                    elevation: 3,
+                    elevation: 6,
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const Icon(Icons.work, size: 30, color: Colors.blue),
+                          const Icon(Icons.work, size: 30, color: AppColors.primaryColor),
                           const SizedBox(height: 8),
                           Text(item['type'],
                               style:
-                                  const TextStyle(fontWeight: FontWeight.bold)),
+                                  const TextStyle(fontSize: 11,color: AppColors.primaryColor,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                         ],
                       ),
                     ),
@@ -295,6 +331,17 @@ class _MainCustomerState extends State<MainCustomer> {
                 MaterialPageRoute(
                     builder: (context) =>
                         ContactsScreen(phone: user?.phone ?? "N/A")),
+              );
+              // Handle navigation
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.info),
+            title: Text('History'),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => WorkerHistoryScreen()),
               );
               // Handle navigation
             },
@@ -382,6 +429,12 @@ class _MainCustomerState extends State<MainCustomer> {
                 color: Colors.black,
               ),
               label: 'Request'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.book,
+                color: Colors.black,
+              ),
+              label: 'Booked'),
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.call,

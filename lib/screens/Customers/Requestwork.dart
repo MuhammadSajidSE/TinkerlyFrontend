@@ -68,8 +68,10 @@ class _CustomerRequestWorkState extends State<CustomerRequestWork> {
                 var status = request['status'];
 
                 // Define colors based on status
-                Color borderColor = status == 2 ? Colors.red.shade900 : Colors.green.shade900;
-                Color backgroundColor = status == 2 ? Colors.red.shade100 : Colors.green.shade100;
+                Color borderColor =
+                    status == 2 ? Colors.red.shade900 : Colors.green.shade900;
+                Color backgroundColor =
+                    status == 2 ? Colors.red.shade100 : Colors.green.shade100;
 
                 return Container(
                   margin: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -88,23 +90,29 @@ class _CustomerRequestWorkState extends State<CustomerRequestWork> {
                           ? NetworkImage(
                               "http://150.136.5.153:2280/cdn/$avatarId.png")
                           : null,
-                      child: avatarId == null
-                          ? const Icon(Icons.person)
-                          : null,
+                      child: avatarId == null ? const Icon(Icons.person) : null,
                     ),
-                    title: Text(workerName,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    title: Text(
+                      workerName,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     subtitle: Text(description),
                     trailing: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: status == 1 ? Colors.red.shade300 : Colors.green.shade300,
+                        color: status == 1
+                            ? Colors.red.shade300
+                            : Colors.green.shade300, // RED if 1, GREEN if 0
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        status == 1 ? 'Rejected' : 'Pending',
+                        status == 1
+                            ? 'Rejected'
+                            : 'Pending', // Text also matches
                         style: TextStyle(
-                          color: status == 1 ? const Color.fromARGB(255, 0, 0, 0) : Colors.green.shade900,
+                          color: Colors
+                              .black, // Always black text (clear for both backgrounds)
                           fontWeight: FontWeight.bold,
                         ),
                       ),
