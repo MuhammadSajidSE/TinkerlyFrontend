@@ -291,33 +291,108 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  void _showHiringDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Enter Work Description"),
-          content: TextField(
-            controller: _descriptionController,
-            maxLines: 3,
-            decoration: const InputDecoration(hintText: "Describe the work..."),
+  // void _showHiringDialog() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         title: const Text("Enter Work Description"),
+  //         content: TextField(
+  //           controller: _descriptionController,
+  //           maxLines: 3,
+  //           decoration: const InputDecoration(hintText: "Describe the work..."),
+  //         ),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () => Navigator.pop(context),
+  //             child: const Text("Cancel"),
+  //           ),
+  //           ElevatedButton(
+  //             onPressed: isSubmitting ? null : _submitHiringRequest,
+  //             child: isSubmitting
+  //                 ? const CircularProgressIndicator()
+  //                 : const Text("Confirm"),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+void _showHiringDialog() {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        backgroundColor: AppColors.backgroundColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Text(
+          "Enter Work Description",
+          style: TextStyle(
+            color: AppColors.primaryColor,
+            fontWeight: FontWeight.bold,
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
+        ),
+        content: TextField(
+          controller: _descriptionController,
+          maxLines: 3,
+          decoration: InputDecoration(
+            hintText: "Describe the work...",
+            hintStyle: TextStyle(color: Colors.grey[600]),
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.primaryColor),
+              borderRadius: BorderRadius.circular(10),
             ),
-            ElevatedButton(
-              onPressed: isSubmitting ? null : _submitHiringRequest,
-              child: isSubmitting
-                  ? const CircularProgressIndicator()
-                  : const Text("Confirm"),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.primaryColor),
+              borderRadius: BorderRadius.circular(10),
             ),
-          ],
-        );
-      },
-    );
-  }
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.secondaryColor),
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              "Cancel",
+              style: TextStyle(color: AppColors.accentColor),
+            ),
+          ),
+          LoginRegisterButton(
+            // style: ElevatedButton.styleFrom(
+            //   backgroundColor: AppColors.primaryColor,
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(8),
+            //   ),
+            // ),
+            onPressed: isSubmitting ? (){} : _submitHiringRequest,
+            // child: isSubmitting
+            //     ? const SizedBox(
+            //         width: 20,
+            //         height: 20,
+            //         child: CircularProgressIndicator(
+            //           color: Colors.white,
+            //           strokeWidth: 2,
+            //         ),
+            //       )
+            //     : const Text(
+            text:  "Confirm",
+            width: 130,
+            // ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
 
   Future<void> _submitHiringRequest() async {
     final user = Provider.of<UserProvider>(context, listen: false).user;
@@ -355,7 +430,11 @@ class _BookingScreenState extends State<BookingScreen> {
       if (response.statusCode == 200 || response.statusCode == 201) {
         Navigator.pop(context); // Close dialog
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Request submitted successfully!')),
+          const SnackBar(content: Text('Request submitted successfully!',style: TextStyle(color: Colors.white),),
+          backgroundColor: AppColors.primaryColor,
+          duration: Duration(seconds: 2),
+          
+          ),
         );
         _descriptionController.clear();
       } else {
@@ -363,7 +442,10 @@ class _BookingScreenState extends State<BookingScreen> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
+        SnackBar(content: Text('Error: $e'),
+        backgroundColor: AppColors.primaryColor,
+        duration: Duration(seconds: 2),
+        ),
       );
     } finally {
       setState(() {
@@ -399,194 +481,106 @@ class _BookingScreenState extends State<BookingScreen> {
           ),
 
           // Your main page content
-          Container(
-            padding:
-                const EdgeInsets.only(top: 0), // Push down to avoid overlap
-            child: isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : workerData == null
-                    ? const Center(
-                        child: Text('Failed to load worker details.'))
-                    : Column(
-                        children: [
-                          SizedBox(
-                            height: 80,
-                          ),
-                          // SizedBox(
-                          //   height: 700,
-                          // child:
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 22.0),
-                            child: Column(
-                              children: [
-                                Center(
-                                    child: buildProfileImage(
-                                        workerData!['avatarId'])),
-                                Text(
-                                  workerData!['userDetails']['name'],
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.primaryColor),
-                                ),
-                                const SizedBox(height: 1),
-                                Container(
-                                  padding: const EdgeInsets.all(18.0),
-                                  width: double.infinity,
-                                  height: 425,
-                                  decoration: BoxDecoration(
-                                    color: const Color.fromARGB(
-                                        255, 255, 255, 255),
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColors.primaryColor
-                                            .withOpacity(1),
-                                        spreadRadius: 2,
-                                        blurRadius: 12,
-                                        offset: const Offset(0, 3),
-                                      ),
-                                    ],
+          SingleChildScrollView(
+            child: Container(
+              padding:
+                  const EdgeInsets.only(top: 0), // Push down to avoid overlap
+              child: isLoading
+                  ? Container(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height - 100,
+                    child: Center(child: CircularProgressIndicator())
+                    )
+                  : workerData == null
+                      ? const Center(
+                          child: Text('Failed to load worker details.'))
+                      : Column(
+                          children: [
+                            SizedBox(
+                              height: 80,
+                            ),
+                            // SizedBox(
+                            //   height: 700,
+                            // child:
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 22.0),
+                              child: Column(
+                                children: [
+                                  Center(
+                                      child: buildProfileImage(
+                                          workerData!['avatarId'])),
+                                  Text(
+                                    workerData!['userDetails']['name'],
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.primaryColor),
                                   ),
-                                  child: SingleChildScrollView(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(Icons.email,
-                                                  color: Colors.amber),
-                                              const SizedBox(width: 10),
-                                              RichText(
-                                                text: TextSpan(
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: AppColors
-                                                          .primaryColor,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  children: <TextSpan>[
-                                                    TextSpan(text: 'Email '),
-                                                    const TextSpan(
-                                                      text: ':',
-                                                      style: TextStyle(
-                                                          color: Colors
-                                                              .amber), // Or your specific golden color
-                                                    ),
-                                                    TextSpan(
-                                                        text:
-                                                            ' ${workerData!['userDetails']['email']}'),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Icon(Icons.phone,
-                                                  color: Colors.amber),
-                                              const SizedBox(width: 10),
-                                              RichText(
-                                                text: TextSpan(
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: AppColors
-                                                          .primaryColor,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  children: <TextSpan>[
-                                                    const TextSpan(
-                                                        text: 'Phone '),
-                                                    const TextSpan(
-                                                      text: ':',
-                                                      style: TextStyle(
-                                                          color: Colors.amber),
-                                                    ),
-                                                    TextSpan(
-                                                        text:
-                                                            ' ${workerData!['userDetails']['phone']}'),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Icon(Icons.perm_identity,
-                                                  color: Colors
-                                                      .amber), // You might want a different icon
-                                              const SizedBox(width: 10),
-                                              RichText(
-                                                text: TextSpan(
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: AppColors
-                                                          .primaryColor,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  children: <TextSpan>[
-                                                    const TextSpan(
-                                                        text: 'NIC '),
-                                                    const TextSpan(
-                                                      text: ':',
-                                                      style: TextStyle(
-                                                          color: Colors.amber),
-                                                    ),
-                                                    TextSpan(
-                                                        text:
-                                                            ' ${workerData!['userDetails']['nic']}'),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Icon(Icons.cake,
-                                                  color: Colors
-                                                      .amber), // You might want a different icon
-                                              const SizedBox(width: 10),
-                                              RichText(
-                                                text: TextSpan(
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: AppColors
-                                                          .primaryColor,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  children: <TextSpan>[
-                                                    const TextSpan(
-                                                        text: 'Age '),
-                                                    const TextSpan(
-                                                      text: ':',
-                                                      style: TextStyle(
-                                                          color: Colors.amber),
-                                                    ),
-                                                    TextSpan(
-                                                        text:
-                                                            ' ${workerData!['userDetails']['age']}'),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            crossAxisAlignment: CrossAxisAlignment
-                                                .start, // Align icon and text to the top
-                                            children: [
-                                              const Icon(Icons.location_on,
-                                                  color: Colors.amber),
-                                              const SizedBox(width: 10),
-                                              Expanded(
-                                                // Use Expanded to allow text to wrap properly
-                                                child: RichText(
+                                  const SizedBox(height: 1),
+                                  Container(
+                                    padding: const EdgeInsets.all(18.0),
+                                    width: double.infinity,
+                                    height: 425,
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromARGB(
+                                          255, 255, 255, 255),
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: AppColors.primaryColor
+                                              .withOpacity(1),
+                                          spreadRadius: 2,
+                                          blurRadius: 12,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                      ],
+                                    ),
+                                    child: SingleChildScrollView(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Icon(Icons.email,
+                                                    color: Colors.amber),
+                                                const SizedBox(width: 10),
+                                                RichText(
+                                                  text: TextSpan(
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: AppColors
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    children: <TextSpan>[
+                                                      TextSpan(text: 'Email '),
+                                                      const TextSpan(
+                                                        text: ':',
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .amber), // Or your specific golden color
+                                                      ),
+                                                      TextSpan(
+                                                          text:
+                                                              ' ${workerData!['userDetails']['email']}'),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Icon(Icons.phone,
+                                                    color: Colors.amber),
+                                                const SizedBox(width: 10),
+                                                RichText(
                                                   text: TextSpan(
                                                     style: TextStyle(
                                                         fontSize: 16,
@@ -596,215 +590,309 @@ class _BookingScreenState extends State<BookingScreen> {
                                                             FontWeight.bold),
                                                     children: <TextSpan>[
                                                       const TextSpan(
-                                                          text: 'Address '),
+                                                          text: 'Phone '),
                                                       const TextSpan(
                                                         text: ':',
                                                         style: TextStyle(
-                                                            color:
-                                                                Colors.amber),
+                                                            color: Colors.amber),
                                                       ),
                                                       TextSpan(
                                                           text:
-                                                              ' ${workerData!['userDetails']['address']}'),
+                                                              ' ${workerData!['userDetails']['phone']}'),
                                                     ],
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Row(
-                                            children: [
-                                              const Icon(Icons.star,
-                                                  color: Colors.amber),
-                                              const SizedBox(width: 10),
-                                              RichText(
-                                                text: TextSpan(
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Icon(Icons.perm_identity,
+                                                    color: Colors
+                                                        .amber), // You might want a different icon
+                                                const SizedBox(width: 10),
+                                                RichText(
+                                                  text: TextSpan(
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: AppColors
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    children: <TextSpan>[
+                                                      const TextSpan(
+                                                          text: 'NIC '),
+                                                      const TextSpan(
+                                                        text: ':',
+                                                        style: TextStyle(
+                                                            color: Colors.amber),
+                                                      ),
+                                                      TextSpan(
+                                                          text:
+                                                              ' ${workerData!['userDetails']['nic']}'),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Icon(Icons.cake,
+                                                    color: Colors
+                                                        .amber), // You might want a different icon
+                                                const SizedBox(width: 10),
+                                                RichText(
+                                                  text: TextSpan(
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: AppColors
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    children: <TextSpan>[
+                                                      const TextSpan(
+                                                          text: 'Age '),
+                                                      const TextSpan(
+                                                        text: ':',
+                                                        style: TextStyle(
+                                                            color: Colors.amber),
+                                                      ),
+                                                      TextSpan(
+                                                          text:
+                                                              ' ${workerData!['userDetails']['age']}'),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start, // Align icon and text to the top
+                                              children: [
+                                                const Icon(Icons.location_on,
+                                                    color: Colors.amber),
+                                                const SizedBox(width: 10),
+                                                Expanded(
+                                                  // Use Expanded to allow text to wrap properly
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: AppColors
+                                                              .primaryColor,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                      children: <TextSpan>[
+                                                        const TextSpan(
+                                                            text: 'Address '),
+                                                        const TextSpan(
+                                                          text: ':',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.amber),
+                                                        ),
+                                                        TextSpan(
+                                                            text:
+                                                                ' ${workerData!['userDetails']['address']}'),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              children: [
+                                                const Icon(Icons.star,
+                                                    color: Colors.amber),
+                                                const SizedBox(width: 10),
+                                                RichText(
+                                                  text: TextSpan(
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: AppColors
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    children: <TextSpan>[
+                                                      const TextSpan(
+                                                          text: 'Rating '),
+                                                      const TextSpan(
+                                                        text: ':',
+                                                        style: TextStyle(
+                                                            color: Colors.amber),
+                                                      ),
+                                                      TextSpan(
+                                                          text:
+                                                              ' ${workerData!['averageRating'].toString()}'),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Icon(Icons.work_history,
+                                                    color: Colors.amber),
+                                                const SizedBox(width: 10),
+                                                RichText(
+                                                  text: TextSpan(
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: AppColors
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    children: <TextSpan>[
+                                                      const TextSpan(
+                                                          text: 'Experience '),
+                                                      const TextSpan(
+                                                        text: ':',
+                                                        style: TextStyle(
+                                                            color: Colors.amber),
+                                                      ),
+                                                      TextSpan(
+                                                          text:
+                                                              '${workerData!['workerProfile']['yearsOfExperience']} years'),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const Icon(Icons.school,
+                                                    color: Colors.amber),
+                                                const SizedBox(width: 10),
+                                                const Text(
+                                                  'Education:',
                                                   style: TextStyle(
+                                                      fontWeight: FontWeight.bold,
                                                       fontSize: 16,
                                                       color: AppColors
-                                                          .primaryColor,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  children: <TextSpan>[
-                                                    const TextSpan(
-                                                        text: 'Rating '),
-                                                    const TextSpan(
-                                                      text: ':',
-                                                      style: TextStyle(
-                                                          color: Colors.amber),
-                                                    ),
-                                                    TextSpan(
-                                                        text:
-                                                            ' ${workerData!['averageRating'].toString()}'),
-                                                  ],
+                                                          .primaryColor), // Adjust fontSize if needed
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Icon(Icons.work_history,
-                                                  color: Colors.amber),
-                                              const SizedBox(width: 10),
-                                              RichText(
-                                                text: TextSpan(
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                                height:
+                                                    5), // Add some spacing between the heading and the list
+                                            ...List<String>.from(
+                                              workerData!['workerProfile']
+                                                  ['workerEducation'],
+                                            ).map((edu) => Padding(
+                                                  // Add some padding for each education item
+                                                  padding: const EdgeInsets.only(
+                                                      left:
+                                                          28.0), // Indent to align with text
+                                                  child: Text(
+                                                    '- $edu',
+                                                    style: TextStyle(
+                                                        color: AppColors
+                                                            .primaryColor),
+                                                  ), // Adjust fontSize if needed
+                                                )),
+            // const SizedBox(height: 10),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const Icon(Icons.folder_open,
+                                                    color: Colors
+                                                        .amber), // Choose an appropriate icon
+                                                const SizedBox(width: 10),
+                                                const Text(
+                                                  'Domains:',
                                                   style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: AppColors
-                                                          .primaryColor,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  children: <TextSpan>[
-                                                    const TextSpan(
-                                                        text: 'Experience '),
-                                                    const TextSpan(
-                                                      text: ':',
-                                                      style: TextStyle(
-                                                          color: Colors.amber),
-                                                    ),
-                                                    TextSpan(
-                                                        text:
-                                                            '${workerData!['workerProfile']['yearsOfExperience']} years'),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const Icon(Icons.school,
-                                                  color: Colors.amber),
-                                              const SizedBox(width: 10),
-                                              const Text(
-                                                'Education:',
-                                                style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 16,
-                                                    color: AppColors
-                                                        .primaryColor), // Adjust fontSize if needed
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(
-                                              height:
-                                                  5), // Add some spacing between the heading and the list
-                                          ...List<String>.from(
-                                            workerData!['workerProfile']
-                                                ['workerEducation'],
-                                          ).map((edu) => Padding(
-                                                // Add some padding for each education item
-                                                padding: const EdgeInsets.only(
-                                                    left:
-                                                        28.0), // Indent to align with text
-                                                child: Text(
-                                                  '- $edu',
+                                                    color: AppColors.primaryColor,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 5),
+                                            ...List<int>.from(
+                                              workerData!['workerProfile']
+                                                  ['workerDomains'],
+                                            ).map((domain) => Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      left: 28.0),
+                                                  child: Text(
+                                                    '- ${domainNames[domain] ?? "Unknown"}',
+                                                    style: TextStyle(
+                                                        color: AppColors
+                                                            .primaryColor),
+                                                  ),
+                                                )),
+                                            const SizedBox(height: 10),
+                                            // const SizedBox(height: 10),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const Icon(Icons.build,
+                                                    color: Colors
+                                                        .amber), // Choose an appropriate icon
+                                                const SizedBox(width: 10),
+                                                const Text(
+                                                  'Skills:',
                                                   style: TextStyle(
-                                                      color: AppColors
-                                                          .primaryColor),
-                                                ), // Adjust fontSize if needed
-                                              )),
-// const SizedBox(height: 10),
-                                          const SizedBox(height: 10),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const Icon(Icons.folder_open,
-                                                  color: Colors
-                                                      .amber), // Choose an appropriate icon
-                                              const SizedBox(width: 10),
-                                              const Text(
-                                                'Domains:',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                  color: AppColors.primaryColor,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                    color: AppColors.primaryColor,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 5),
-                                          ...List<int>.from(
-                                            workerData!['workerProfile']
-                                                ['workerDomains'],
-                                          ).map((domain) => Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 28.0),
-                                                child: Text(
-                                                  '- ${domainNames[domain] ?? "Unknown"}',
-                                                  style: TextStyle(
-                                                      color: AppColors
-                                                          .primaryColor),
-                                                ),
-                                              )),
-                                          const SizedBox(height: 10),
-                                          // const SizedBox(height: 10),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const Icon(Icons.build,
-                                                  color: Colors
-                                                      .amber), // Choose an appropriate icon
-                                              const SizedBox(width: 10),
-                                              const Text(
-                                                'Skills:',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                  color: AppColors.primaryColor,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 5),
-                                          ...List<String>.from(
-                                            workerData!['workerProfile']
-                                                ['workerSkills'],
-                                          ).map((skillId) => Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 28.0),
-                                                child: Text(
-                                                  '- ${skillMap[skillId] ?? "Unknown Skill"}',
-                                                  style: TextStyle(
-                                                      color: AppColors
-                                                          .primaryColor),
-                                                ),
-                                              )),
-                                          const SizedBox(height: 10),
-                                        ],
+                                              ],
+                                            ),
+                                            const SizedBox(height: 5),
+                                            ...List<String>.from(
+                                              workerData!['workerProfile']
+                                                  ['workerSkills'],
+                                            ).map((skillId) => Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      left: 28.0),
+                                                  child: Text(
+                                                    '- ${skillMap[skillId] ?? "Unknown Skill"}',
+                                                    style: TextStyle(
+                                                        color: AppColors
+                                                            .primaryColor),
+                                                  ),
+                                                )),
+                                            const SizedBox(height: 10),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          // ),
-                          // SafeArea(
-                          // child: Padding(
-                          // padding: const EdgeInsets.all(6.0),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 22.0, vertical: 6),
-                            child: LoginRegisterButton(
-                              onPressed: () {
-                                _showHiringDialog();
-                              },
-                              text: "Hiring",
+                            // ),
+                            // SafeArea(
+                            // child: Padding(
+                            // padding: const EdgeInsets.all(6.0),
+                            SizedBox(
+                              height: 20,
                             ),
-                          ),
-                          // ),
-                          // )
-                        ],
-                      ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 22.0, vertical: 6),
+                              child: LoginRegisterButton(
+                                onPressed: () {
+                                  _showHiringDialog();
+                                },
+                                text: "Hiring",
+                              ),
+                            ),
+                            // ),
+                            // )
+                          ],
+                        ),
+            ),
           ),
         ],
       ),

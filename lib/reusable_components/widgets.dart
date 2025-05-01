@@ -243,11 +243,13 @@ class _BuildTextFeildState extends State<BuildTextFeild> {
 class LoginRegisterButton extends StatefulWidget {
   final String text;
   final VoidCallback onPressed;
+  final double width;
 
   const LoginRegisterButton({
     Key? key,
     required this.text,
     required this.onPressed,
+    this.width = double.infinity,
   }) : super(key: key);
 
   @override
@@ -258,7 +260,7 @@ class _LoginRegisterButtonState extends State<LoginRegisterButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
+      width: widget.width,
       height: 50,
       child: ElevatedButton(
         onPressed: widget.onPressed, // Use widget.onPressed to access the callback

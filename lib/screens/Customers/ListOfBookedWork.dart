@@ -196,41 +196,45 @@ class _BookingListWidgetState extends State<BookingListWidget> {
           final workTypeName = workDetailsMap[workDetailsId] ?? 'Unknown Work Type';
           final workerAvatarId = workerProfile?['avatarId'];
       
-      return Card(
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        child: ListTile(
-      leading:CircleAvatar(
-                      radius: 25,
-                      backgroundColor: Colors.amber,
-                      child: CircleAvatar(
-                        radius: 23,
-        backgroundImage: workerAvatarId != null
-            ? NetworkImage("http://150.136.5.153:2280/cdn/$workerAvatarId.png")
-            : null,
-        child: workerAvatarId == null ? const Icon(Icons.person) : null,
-      ),),
-      title: Text(workerName),
-      subtitle: Text('Work: $workTypeName'),
-         onTap: () {
-        Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => DetailBooked(
-          bookingId: booking['bookingId'] ?? '',
-          workName: workDetailsMap[booking['workDetailsId']] ?? 'Unknown Work',
-          workPrice: booking['workPrice']?.toString() ?? '',
-          workerAvatarId: booking['workerProfile']?['avatarId'] ?? '',
-          workerName: booking['workerProfile']?['userDetails']?['name'] ?? 'Unknown',
-          workerAddress: booking['workerProfile']?['userDetails']?['address'] ?? '',
-          yearsOfExperience: booking['workerProfile']?['workerProfile']?['yearsOfExperience']?.toString() ?? '',
-          workerEducation: (booking['workerProfile']?['workerProfile']?['workerEducation'] as List?)?.join(", ") ?? '',
-          startDate: booking['startDate'] ?? '',
-          endDate: booking['endDate'] ?? '',
-          description: booking['description'] ?? '',
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: Card(
+            color: index%2==0 ? AppColors.secondaryColor:AppColors.primaryColor,  
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          child: ListTile(
+        leading:CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.amber,
+                        child: CircleAvatar(
+                          radius: 23,
+          backgroundImage: workerAvatarId != null
+              ? NetworkImage("http://150.136.5.153:2280/cdn/$workerAvatarId.png")
+              : null,
+          child: workerAvatarId == null ? const Icon(Icons.person) : null,
+        ),),
+        title: Text(workerName,style: TextStyle(color: index%2==0 ? AppColors.primaryColor:AppColors.secondaryColor),),
+        subtitle: Text('Work: $workTypeName',style: TextStyle(color: index%2==0 ? AppColors.primaryColor:AppColors.secondaryColor),),
+           onTap: () {
+          Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailBooked(
+            bookingId: booking['bookingId'] ?? '',
+            workName: workDetailsMap[booking['workDetailsId']] ?? 'Unknown Work',
+            workPrice: booking['workPrice']?.toString() ?? '',
+            workerAvatarId: booking['workerProfile']?['avatarId'] ?? '',
+            workerName: booking['workerProfile']?['userDetails']?['name'] ?? 'Unknown',
+            workerAddress: booking['workerProfile']?['userDetails']?['address'] ?? '',
+            yearsOfExperience: booking['workerProfile']?['workerProfile']?['yearsOfExperience']?.toString() ?? '',
+            workerEducation: (booking['workerProfile']?['workerProfile']?['workerEducation'] as List?)?.join(", ") ?? '',
+            startDate: booking['startDate'] ?? '',
+            endDate: booking['endDate'] ?? '',
+            description: booking['description'] ?? '',
+          ),
         ),
-      ),
-        );
-      },
+          );
+        },
+          ),
         ),
       );
       

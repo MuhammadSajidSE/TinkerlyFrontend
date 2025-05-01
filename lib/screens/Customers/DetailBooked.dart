@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'dart:convert';
 
 import 'package:tinkerly/providers/userprovider.dart';
+import 'package:tinkerly/reusable_components/constants.dart';
+import 'package:tinkerly/reusable_components/widgets.dart';
 
 class DetailBooked extends StatefulWidget {
   final String bookingId;
@@ -107,57 +109,181 @@ class _DetailBookedState extends State<DetailBooked> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Booking Details'),
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Booking Details'),
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: SingleChildScrollView(
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               Center(
+//                 child: CircleAvatar(
+//                   radius: 50,
+//                   backgroundImage: widget.workerAvatarId.isNotEmpty
+//                       ? NetworkImage("http://150.136.5.153:2280/cdn/${widget.workerAvatarId}.png")
+//                       : null,
+//                   child: widget.workerAvatarId.isEmpty
+//                       ? const Icon(Icons.person, size: 50)
+//                       : null,
+//                 ),
+//               ),
+//               const SizedBox(height: 20),
+//               Text('Worker Name: ${widget.workerName}', style: const TextStyle(fontSize: 18)),
+//               const SizedBox(height: 10),
+//               Text('Address: ${widget.workerAddress}', style: const TextStyle(fontSize: 18)),
+//               const SizedBox(height: 10),
+//               Text('Work: ${widget.workName}', style: const TextStyle(fontSize: 18)),
+//               const SizedBox(height: 10),
+//               Text('Price: Rs. ${widget.workPrice}', style: const TextStyle(fontSize: 18)),
+//               const SizedBox(height: 10),
+//               Text('Experience: ${widget.yearsOfExperience} years', style: const TextStyle(fontSize: 18)),
+//               const SizedBox(height: 10),
+//               Text('Education: ${widget.workerEducation}', style: const TextStyle(fontSize: 18)),
+//               const SizedBox(height: 10),
+//               Text('Start Date: ${widget.startDate}', style: const TextStyle(fontSize: 18)),
+//               const SizedBox(height: 10),
+//               Text('End Date: ${widget.endDate}', style: const TextStyle(fontSize: 18)),
+//               const SizedBox(height: 10),
+//               Text('Description: ${widget.description}', style: const TextStyle(fontSize: 18)),
+//               const SizedBox(height: 30),
+//               Center(
+//                 child: ElevatedButton(
+//                   onPressed: _showCompleteDialog,
+//                   child: const Text('Complete'),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: AppColors.backgroundColor,
+    extendBodyBehindAppBar: true,
+    appBar: AppBar(
+      title: const Text(
+        'Booking Details',
+        style: TextStyle(
+            color: AppColors.primaryColor, fontWeight: FontWeight.bold),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundImage: widget.workerAvatarId.isNotEmpty
-                      ? NetworkImage("http://150.136.5.153:2280/cdn/${widget.workerAvatarId}.png")
-                      : null,
-                  child: widget.workerAvatarId.isEmpty
-                      ? const Icon(Icons.person, size: 50)
-                      : null,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Text('Worker Name: ${widget.workerName}', style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 10),
-              Text('Address: ${widget.workerAddress}', style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 10),
-              Text('Work: ${widget.workName}', style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 10),
-              Text('Price: Rs. ${widget.workPrice}', style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 10),
-              Text('Experience: ${widget.yearsOfExperience} years', style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 10),
-              Text('Education: ${widget.workerEducation}', style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 10),
-              Text('Start Date: ${widget.startDate}', style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 10),
-              Text('End Date: ${widget.endDate}', style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 10),
-              Text('Description: ${widget.description}', style: const TextStyle(fontSize: 18)),
-              const SizedBox(height: 30),
-              Center(
-                child: ElevatedButton(
-                  onPressed: _showCompleteDialog,
-                  child: const Text('Complete'),
-                ),
-              ),
-            ],
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+    ),
+    body: Stack(
+      children: [
+        Positioned(
+          top: 0,
+          right: 0,
+          child: Image.asset(
+            'assets/images/design.png',
+            width: 136,
+            fit: BoxFit.contain,
           ),
         ),
-      ),
-    );
-  }
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 22.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 80),
+                Center(
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: widget.workerAvatarId.isNotEmpty
+                        ? NetworkImage("http://150.136.5.153:2280/cdn/${widget.workerAvatarId}.png")
+                        : null,
+                    child: widget.workerAvatarId.isEmpty
+                        ? const Icon(Icons.person, size: 50)
+                        : null,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  widget.workerName,
+                  style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryColor),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  padding: const EdgeInsets.all(18.0),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildRow(Icons.location_on, "Address", widget.workerAddress),
+                      buildRow(Icons.work, "Work", widget.workName),
+                      buildRow(Icons.attach_money, "Price", "Rs. ${widget.workPrice}"),
+                      buildRow(Icons.work_history, "Experience", "${widget.yearsOfExperience} years"),
+                      buildRow(Icons.school, "Education", widget.workerEducation),
+                      buildRow(Icons.date_range, "Start Date", widget.startDate),
+                      buildRow(Icons.event, "End Date", widget.endDate),
+                      buildRow(Icons.description, "Description", widget.description),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                LoginRegisterButton(
+                  onPressed: _showCompleteDialog,
+                  text: 'Complete'
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget buildRow(IconData icon, String label, String value) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 10.0),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, color: Colors.amber),
+        const SizedBox(width: 10),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              style: const TextStyle(fontSize: 16, color: AppColors.primaryColor),
+              children: [
+                TextSpan(
+                    text: '$label ',
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                const TextSpan(text: ': ', style: TextStyle(color: Colors.amber)),
+                TextSpan(text: value),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 }
