@@ -487,15 +487,16 @@ class _CustomerResponseworkState extends State<CustomerResponsework> {
                 );
               },
               leading: CircleAvatar(
-                backgroundColor: Colors.grey[300],
-                child: Text(workerName[0]), // Show first letter
-              ),
+              backgroundImage: 
+                  NetworkImage(
+                      "http://150.136.5.153:2280/cdn/${workerAvatarId}.png")
+                
+            ),
               title: Text(workerName),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Description: $description'),
-                  Text('Avatar ID: $workerAvatarId'),
                   const SizedBox(height: 8),
                   if (status != 1) // ✅ Only show if status != 1
                     Row(
