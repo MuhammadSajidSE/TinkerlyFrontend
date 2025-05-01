@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'dart:convert';
 
 import 'package:tinkerly/providers/userprovider.dart';
+import 'package:tinkerly/reusable_components/constants.dart';
 
 class CustomerRequestWork extends StatefulWidget {
   const CustomerRequestWork({super.key});
@@ -48,8 +49,14 @@ class _CustomerRequestWorkState extends State<CustomerRequestWork> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text('Customer Request Work'),
+        backgroundColor: Colors.transparent,
+        title: Text('Customer Request Work', style: TextStyle(
+              fontSize: 22,
+              color: AppColors.primaryColor,
+              fontWeight: FontWeight.bold),),
       ),
       body: requestData.isEmpty
           ? Center(
@@ -69,41 +76,53 @@ class _CustomerRequestWorkState extends State<CustomerRequestWork> {
 
                 // Define colors based on status
                 Color borderColor =
-                    status == 1 ? Colors.red.shade900 : Colors.green.shade900;
+                    status == 1 ? Colors.amber : Colors.amber;
+              
                 Color backgroundColor =
-                    status == 1 ? Colors.red.shade100 : Colors.green.shade100;
+                    status == 1 ? AppColors.secondaryColor : AppColors.primaryColor;
 
                 return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  margin: EdgeInsets.symmetric(horizontal: 18, vertical: 6),
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: backgroundColor, // light red / light green
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: borderColor, // dark red / dark green
-                      width: 2,
+                      width: 0.5,
                     ),
+                    boxShadow: [BoxShadow(
+                       color:  status == 1 ? AppColors.secondaryColor : AppColors.primaryColor,
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: Offset(0, 1), // changes position of shadow
+                    )]
                   ),
                   child: ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: avatarId != null
-                          ? NetworkImage(
-                              "http://150.136.5.153:2280/cdn/$avatarId.png")
-                          : null,
-                      child: avatarId == null ? const Icon(Icons.person) : null,
+                      radius: 25,
+                      backgroundColor: Colors.amber,
+                      child: CircleAvatar(
+                        radius: 23,
+                        backgroundImage: avatarId != null
+                            ? NetworkImage(
+                                "http://150.136.5.153:2280/cdn/$avatarId.png",)
+                            : null,
+                        child: avatarId == null ? const Icon(Icons.person) : null,
+                      ),
                     ),
                     title: Text(
                       workerName,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.bold,color: status == 1 ? AppColors.primaryColor : AppColors.secondaryColor),
                     ),
-                    subtitle: Text(description),
+                    subtitle: Text(description,style: TextStyle(color: status == 1 ? AppColors.primaryColor : AppColors.secondaryColor),),
                     trailing: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                          horizontal: 14, vertical: 8),
                       decoration: BoxDecoration(
                         color: status == 1
-                            ? Colors.red.shade300
-                            : Colors.green.shade300, // RED if 1, GREEN if 0
+                            ? const Color.fromARGB(255, 206, 54, 54)
+                            : const Color.fromARGB(255, 84, 158, 0), // RED if 1, GREEN if 0
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -111,8 +130,7 @@ class _CustomerRequestWorkState extends State<CustomerRequestWork> {
                             ? 'Rejected'
                             : 'Pending', // Text also matches
                         style: TextStyle(
-                          color: Colors
-                              .black, // Always black text (clear for both backgrounds)
+                          color: status != 1 ? Colors.white : AppColors.backgroundColor, // Always black text (clear for both backgrounds)
                           fontWeight: FontWeight.bold,
                         ),
                       ),

@@ -98,6 +98,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:tinkerly/providers/userprovider.dart';
+import 'package:tinkerly/reusable_components/constants.dart';
 import 'package:tinkerly/screens/Customers/DetailBooked.dart';
 
 // import 'user_provider.dart'; // Your UserProvider
@@ -174,52 +175,67 @@ class _BookingListWidgetState extends State<BookingListWidget> {
       return const Center(child: Text('No bookings found.'));
     }
 
-    return ListView.builder(
-      itemCount: bookings.length,
-      itemBuilder: (context, index) {
-        final booking = bookings[index];
-        final workerProfile = booking['workerProfile'];
-        final userDetails = workerProfile?['userDetails'];
-        final workerName = userDetails?['name'] ?? 'Unknown';
-        final workDetailsId = booking['workDetailsId'] ?? 'N/A';
-        final workTypeName = workDetailsMap[workDetailsId] ?? 'Unknown Work Type';
-        final workerAvatarId = workerProfile?['avatarId'];
-
-return Card(
-  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-  child: ListTile(
-    leading: CircleAvatar(
-      backgroundImage: workerAvatarId != null
-          ? NetworkImage("http://150.136.5.153:2280/cdn/$workerAvatarId.png")
-          : null,
-      child: workerAvatarId == null ? const Icon(Icons.person) : null,
-    ),
-    title: Text(workerName),
-    subtitle: Text('Work: $workTypeName'),
-   onTap: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => DetailBooked(
-        bookingId: booking['bookingId'] ?? '',
-        workName: workDetailsMap[booking['workDetailsId']] ?? 'Unknown Work',
-        workPrice: booking['workPrice']?.toString() ?? '',
-        workerAvatarId: booking['workerProfile']?['avatarId'] ?? '',
-        workerName: booking['workerProfile']?['userDetails']?['name'] ?? 'Unknown',
-        workerAddress: booking['workerProfile']?['userDetails']?['address'] ?? '',
-        yearsOfExperience: booking['workerProfile']?['workerProfile']?['yearsOfExperience']?.toString() ?? '',
-        workerEducation: (booking['workerProfile']?['workerProfile']?['workerEducation'] as List?)?.join(", ") ?? '',
-        startDate: booking['startDate'] ?? '',
-        endDate: booking['endDate'] ?? '',
-        description: booking['description'] ?? '',
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
+        appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text('Customer Request Work', style: TextStyle(
+              fontSize: 22,
+              color: AppColors.primaryColor,
+              fontWeight: FontWeight.bold),),
       ),
-    ),
-  );
-},
-  ),
-);
-
+      body: ListView.builder(
+        itemCount: bookings.length,
+        itemBuilder: (context, index) {
+          final booking = bookings[index];
+          final workerProfile = booking['workerProfile'];
+          final userDetails = workerProfile?['userDetails'];
+          final workerName = userDetails?['name'] ?? 'Unknown';
+          final workDetailsId = booking['workDetailsId'] ?? 'N/A';
+          final workTypeName = workDetailsMap[workDetailsId] ?? 'Unknown Work Type';
+          final workerAvatarId = workerProfile?['avatarId'];
+      
+      return Card(
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: ListTile(
+      leading:CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.amber,
+                      child: CircleAvatar(
+                        radius: 23,
+        backgroundImage: workerAvatarId != null
+            ? NetworkImage("http://150.136.5.153:2280/cdn/$workerAvatarId.png")
+            : null,
+        child: workerAvatarId == null ? const Icon(Icons.person) : null,
+      ),),
+      title: Text(workerName),
+      subtitle: Text('Work: $workTypeName'),
+         onTap: () {
+        Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DetailBooked(
+          bookingId: booking['bookingId'] ?? '',
+          workName: workDetailsMap[booking['workDetailsId']] ?? 'Unknown Work',
+          workPrice: booking['workPrice']?.toString() ?? '',
+          workerAvatarId: booking['workerProfile']?['avatarId'] ?? '',
+          workerName: booking['workerProfile']?['userDetails']?['name'] ?? 'Unknown',
+          workerAddress: booking['workerProfile']?['userDetails']?['address'] ?? '',
+          yearsOfExperience: booking['workerProfile']?['workerProfile']?['yearsOfExperience']?.toString() ?? '',
+          workerEducation: (booking['workerProfile']?['workerProfile']?['workerEducation'] as List?)?.join(", ") ?? '',
+          startDate: booking['startDate'] ?? '',
+          endDate: booking['endDate'] ?? '',
+          description: booking['description'] ?? '',
+        ),
+      ),
+        );
       },
+        ),
+      );
+      
+        },
+      ),
     );
   }
 }
