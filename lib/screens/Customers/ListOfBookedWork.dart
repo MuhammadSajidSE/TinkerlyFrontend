@@ -98,6 +98,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:tinkerly/providers/userprovider.dart';
+import 'package:tinkerly/reusable_components/constants.dart';
 import 'package:tinkerly/screens/Customers/DetailBooked.dart';
 
 // import 'user_provider.dart'; // Your UserProvider
@@ -194,7 +195,8 @@ return Card(
           : null,
       child: workerAvatarId == null ? const Icon(Icons.person) : null,
     ),
-    title: Text(workerName),
+    title: Text(workerName,style: TextStyle(color: AppColors.primaryColor,),
+    ),
     subtitle: Text('Work: $workTypeName'),
    onTap: () {
   Navigator.push(
