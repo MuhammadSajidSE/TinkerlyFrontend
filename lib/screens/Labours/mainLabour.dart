@@ -5,6 +5,7 @@ import 'package:tinkerly/providers/userprovider.dart';
 import 'package:tinkerly/screens/Authentication/login.dart';
 import 'package:tinkerly/screens/Labours/HistoryWork.dart';
 import 'package:tinkerly/screens/Labours/LabourProfile.dart';
+import 'package:tinkerly/screens/Labours/ToDoWorking.dart';
 import 'package:tinkerly/screens/Labours/WorkTask.dart';
 import 'package:tinkerly/screens/Labours/requestBooking.dart';
 
@@ -21,6 +22,7 @@ class _MainlabourState extends State<Mainlabour> {
   final List<Widget> _pages = [
     Worktask(),
     Historywork(),
+    Todoworking(),
     WorkerRequestsPage(),
     Labourprofile(),
   ];
@@ -115,6 +117,13 @@ class _MainlabourState extends State<Mainlabour> {
               color: Colors.black,
             ),
             label: 'Working',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.today_outlined,
+              color: Colors.black,
+            ),
+            label: 'ToDo',
           ),
           BottomNavigationBarItem(
             icon: Icon(

@@ -37,7 +37,7 @@ class _CustomerRequestWorkState extends State<CustomerRequestWork> {
       setState(() {
         requestData = data['data']
             .where(
-                (request) => request['status'] == 0 || request['status'] == 2)
+                (request) => request['status'] == 0 || request['status'] == 1)
             .toList();
       });
     } else {
@@ -69,9 +69,9 @@ class _CustomerRequestWorkState extends State<CustomerRequestWork> {
 
                 // Define colors based on status
                 Color borderColor =
-                    status == 2 ? Colors.red.shade900 : Colors.green.shade900;
+                    status == 1 ? Colors.red.shade900 : Colors.green.shade900;
                 Color backgroundColor =
-                    status == 2 ? Colors.red.shade100 : Colors.green.shade100;
+                    status == 1 ? Colors.red.shade100 : Colors.green.shade100;
 
                 return Container(
                   margin: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
