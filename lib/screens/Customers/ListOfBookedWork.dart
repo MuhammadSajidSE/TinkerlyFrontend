@@ -91,16 +91,12 @@
 //     );
 //   }
 // }
-
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:tinkerly/providers/userprovider.dart';
 import 'package:tinkerly/screens/Customers/DetailBooked.dart';
-
-// import 'user_provider.dart'; // Your UserProvider
 
 class BookingListWidget extends StatefulWidget {
   const BookingListWidget({Key? key}) : super(key: key);
@@ -149,8 +145,13 @@ class _BookingListWidgetState extends State<BookingListWidget> {
           for (var item in workData) item['id']: item['type'],
         };
 
+        // Filter bookings with workStatus == 1
+        final filteredBookings = bookingBody['data']
+            .where((booking) => booking['status'] == 1)
+            .toList();
+
         setState(() {
-          bookings = bookingBody['data'];
+          bookings = filteredBookings;
           isLoading = false;
         });
       } else {
@@ -171,7 +172,7 @@ class _BookingListWidgetState extends State<BookingListWidget> {
     }
 
     if (bookings.isEmpty) {
-      return const Center(child: Text('No bookings found.'));
+      return const Center(child: Text('No bookings found with status 1.'));
     }
 
     return ListView.builder(
@@ -185,40 +186,39 @@ class _BookingListWidgetState extends State<BookingListWidget> {
         final workTypeName = workDetailsMap[workDetailsId] ?? 'Unknown Work Type';
         final workerAvatarId = workerProfile?['avatarId'];
 
-return Card(
-  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-  child: ListTile(
-    leading: CircleAvatar(
-      backgroundImage: workerAvatarId != null
-          ? NetworkImage("http://150.136.5.153:2280/cdn/$workerAvatarId.png")
-          : null,
-      child: workerAvatarId == null ? const Icon(Icons.person) : null,
-    ),
-    title: Text(workerName),
-    subtitle: Text('Work: $workTypeName'),
-   onTap: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => DetailBooked(
-        bookingId: booking['bookingId'] ?? '',
-        workName: workDetailsMap[booking['workDetailsId']] ?? 'Unknown Work',
-        workPrice: booking['workPrice']?.toString() ?? '',
-        workerAvatarId: booking['workerProfile']?['avatarId'] ?? '',
-        workerName: booking['workerProfile']?['userDetails']?['name'] ?? 'Unknown',
-        workerAddress: booking['workerProfile']?['userDetails']?['address'] ?? '',
-        yearsOfExperience: booking['workerProfile']?['workerProfile']?['yearsOfExperience']?.toString() ?? '',
-        workerEducation: (booking['workerProfile']?['workerProfile']?['workerEducation'] as List?)?.join(", ") ?? '',
-        startDate: booking['startDate'] ?? '',
-        endDate: booking['endDate'] ?? '',
-        description: booking['description'] ?? '',
-      ),
-    ),
-  );
-},
-  ),
-);
-
+        return Card(
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundImage: workerAvatarId != null
+                  ? NetworkImage("http://150.136.5.153:2280/cdn/$workerAvatarId.png")
+                  : null,
+              child: workerAvatarId == null ? const Icon(Icons.person) : null,
+            ),
+            title: Text(workerName),
+            subtitle: Text('Work: $workTypeName'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailBooked(
+                    bookingId: booking['bookingId'] ?? '',
+                    workName: workDetailsMap[booking['workDetailsId']] ?? 'Unknown Work',
+                    workPrice: booking['workPrice']?.toString() ?? '',
+                    workerAvatarId: booking['workerProfile']?['avatarId'] ?? '',
+                    workerName: booking['workerProfile']?['userDetails']?['name'] ?? 'Unknown',
+                    workerAddress: booking['workerProfile']?['userDetails']?['address'] ?? '',
+                    yearsOfExperience: booking['workerProfile']?['workerProfile']?['yearsOfExperience']?.toString() ?? '',
+                    workerEducation: (booking['workerProfile']?['workerProfile']?['workerEducation'] as List?)?.join(", ") ?? '',
+                    startDate: booking['startDate'] ?? '',
+                    endDate: booking['endDate'] ?? '',
+                    description: booking['description'] ?? '',
+                  ),
+                ),
+              );
+            },
+          ),
+        );
       },
     );
   }

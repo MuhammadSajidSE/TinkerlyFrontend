@@ -5,8 +5,10 @@ import 'package:tinkerly/providers/userprovider.dart';
 import 'package:tinkerly/screens/Authentication/login.dart';
 import 'package:tinkerly/screens/Labours/HistoryWork.dart';
 import 'package:tinkerly/screens/Labours/LabourProfile.dart';
+import 'package:tinkerly/screens/Labours/ResponseWork.dart';
 import 'package:tinkerly/screens/Labours/ToDoWorking.dart';
-import 'package:tinkerly/screens/Labours/WorkTask.dart';
+import 'package:tinkerly/screens/Labours/laborhome.dart';
+// import 'package:tinkerly/screens/Labours/WorkTask.dart';
 import 'package:tinkerly/screens/Labours/requestBooking.dart';
 
 class Mainlabour extends StatefulWidget {
@@ -20,8 +22,8 @@ class _MainlabourState extends State<Mainlabour> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    Worktask(),
-    Historywork(),
+    Laborhome(),
+    Responsework(),
     Todoworking(),
     WorkerRequestsPage(),
     Labourprofile(),
@@ -76,6 +78,16 @@ class _MainlabourState extends State<Mainlabour> {
           ),
           ListTile(
             leading: const Icon(Icons.logout),
+            title: const Text('History Work'),
+            onTap: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Historywork()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
             title: const Text('LogOut'),
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -116,7 +128,7 @@ class _MainlabourState extends State<Mainlabour> {
               Icons.work,
               color: Colors.black,
             ),
-            label: 'Working',
+            label: 'Response',
           ),
           BottomNavigationBarItem(
             icon: Icon(
