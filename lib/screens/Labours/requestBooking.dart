@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:tinkerly/providers/userprovider.dart';
+import 'package:tinkerly/reusable_components/constants.dart';
 import 'package:tinkerly/screens/Labours/AcceptWork.dart';
 
 class WorkerRequestsPage extends StatefulWidget {
@@ -64,66 +65,79 @@ Future<void> fetchRequests() async {
     final imageUrl = 'http://150.136.5.153:2280/cdn/$avatarId.png';
 
     return Card(
+      shadowColor: AppColors.primaryColor,
       elevation: 4,
+      color: AppColors.secondaryColor,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+      child: Container(
+         decoration: BoxDecoration(
+      gradient: LinearGradient(
+        colors: [AppColors.primaryColor, AppColors.secondaryColor],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+      borderRadius: BorderRadius.circular(14), // Match Card's border radius if needed
+    ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: AppColors.whitecolor
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        address,
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                    ],
+                        const SizedBox(height: 4),
+                        Text(
+                          address,
+                          style: const TextStyle(color: Color.fromARGB(255, 209, 209, 209)),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                CircleAvatar(
-                  backgroundImage: NetworkImage(imageUrl),
-                  radius: 25,
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    handleAccept(request);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(imageUrl),
+                    radius: 25,
                   ),
-                  child: const Text('Accept'),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    handleReject(request['requestId']);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      handleAccept(request);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                    ),
+                    child: const Text('Accept',style: TextStyle(color: Colors.white)),
                   ),
-                  child: const Text('Reject'),
-                ),
-              ],
-            ),
-          ],
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      handleReject(request['requestId']);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                    ),
+                    child: const Text('Reject',style: TextStyle(color: Colors.white),),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -208,9 +222,16 @@ Future<void> handleReject(String requestId) async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Worker Requests'),
-      ),
+        backgroundColor: Colors.transparent,
+        title: const Text('Worker Requests',
+           style: TextStyle(
+              fontSize: 22,
+              color: AppColors.primaryColor,
+              fontWeight: FontWeight.bold),
+      ),),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : requests.isEmpty
